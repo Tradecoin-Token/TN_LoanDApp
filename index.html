@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<head>
+	<title>Tradecoin Loan DApp Calculator</title>
+
+	<style>
+		body {
+			background-color: #FFFF;
+			font-family: 'Trebuchet MS';
+		}
+		
+		
+		h1 {
+			font-size: 21px;
+			margin-top: 20px;
+			text-align:center
+		}
+		
+		h2 {
+			font-size: 21px;
+			margin-top: 20px;
+			text-align:left
+		}
+		
+		.calculator {
+			width: 400px;
+			height: 450px;
+			background-color: #FF1493;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			padding: 20px 0px 0px 100px;
+			border-radius: 50px;
+			color: white;
+		}
+		
+		input {
+			padding: 7px;
+			width: 70%;
+			margin-top: 7px;
+		}
+		
+		.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 2px;
+  width: 298px
+}
+
+.button1 {border-radius: 8px;}
+.button2 {border-radius: 6px;}
+
+</style>
+</head>
+
+<body>
+	<div class="calculator">
+		<h2>Tradecoin Loan DApp Calculator</h2>
+
+		<!-- Calling Calculate function defined in app.js -->
+		<p>Enter Your TN Amount for Collateral:<br>
+			<input id="amount" type="number" onchange="Calculate()">
+		</p>
+
+		<p>Interest Rate Per Day for 1000 TN:
+			<input id="rate" type="text" value="0.9792 TN" readonly="Calculate()">
+		</p>
+		
+
+		<p>Loan Period (1-90 Days):
+			<input id="days" type="number" min="2" max="90" onchange="Calculate()">
+		</p>
+
+		<h2 id="total"></h2>
+		<button class="button button1" onclick="Calculate()">Calculate	
+		<button class="button button2" onclick="location.href='https://polarity.exchange/dapps?dapp=3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA';">Proceed For Loan	
+		
+
+		</div>
+	<script src="app.js"></script>
+	
+		
+</body>
+
+<div style="position: absolute;left:33.3%;right:33.3%;width:33.3%;height:100px;border:3px solid #FFFF; background: #0dbaae; border-radius: 10px; text-align: left; font-size:14px;font-family:courier,arial">
+    <font color="#FFFFFF"><h1>DApp Available Balance For Loan in
+	<div class="mypanel"></div>
+	    <script>
+    $.getJSON('https://tnnode.turtlenetwork.eu/assets/balance/3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA/7RB3BWayeCVPq3kkpkeJZAFv2DYCB5gEwnutEpRofaw4', 
+	function(data) {
+        var text = `<b>USDT:</b> ${(data.balance/1000000).toFixed(2)}<br>
+`
+        $(".mypanel").html(text);
+    });
+    </script>
+	</h1>
+</div>	
+<div style="position: absolute;left:5%;right:5%;width:400px;height:100px;border:3px solid #FFFF; background: #0dbaae; border-radius: 10px; text-align: left; font-size:14px;font-family:courier,arial">
+	<div class="mypanel1"></div>
+	    <script>
+    $.getJSON('https://tnnode.turtlenetwork.eu/addresses/data/3Jr6cqFtjxLr47JRKAL78dvyLamCtT29Vzd?key=eligibilityfactor', 
+	function(data) {
+        var text = `<h1><b>Loan Against Collateral</b><br> ${data[0].value}%<br></h1>
+`
+        $(".mypanel1").html(text);
+    });
+    </script>	
+	</h1>
+</html>
