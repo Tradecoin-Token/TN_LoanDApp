@@ -115,4 +115,17 @@
     });
     </script>	
 	</h1>
+</div>
+<div style="position: absolute;left:68%;right:0%;width:300px;height:100px;border:3px solid #FFFF; background: #0dbaae; border-radius: 10px; text-align: left; font-size:14px;font-family:courier,arial">
+	<div class="mypanel2"></div>
+	    <script>
+    $.getJSON('https://tnnode.turtlenetwork.eu/addresses/data/3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA?key=Total_Loan_Paid%3A', 
+	function(data) {
+        var text = `<h1><b>Total Loan Paid:</b><br> ${data[0].value} TN<br></h1>
+`
+        $(".mypanel2").html(text);
+    });
+    </script>	
+	</h1>	
+	
 </html>
