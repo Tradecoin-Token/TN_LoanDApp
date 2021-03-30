@@ -62,34 +62,6 @@
 </style>
 </head>
 
-<body>
-	<div class="calculator">
-		<h2>Tradecoin Loan DApp Calculator</h2>
-
-		<!-- Calling Calculate function defined in app.js -->
-		<p>Enter Your TN Amount for Collateral:<br>
-			<input id="amount" type="number" onchange="Calculate()">
-		</p>
-
-		<p>Interest Rate Per Day for 1000 TN:
-			<input id="rate" type="text" value="0.9792 TN" readonly="Calculate()">
-		</p>
-		
-
-		<p>Loan Period (1-90 Days):
-			<input id="days" type="number" min="2" max="90" onchange="Calculate()">
-		</p>
-
-		<h2 id="total"></h2>
-		<button class="button button1" onclick="Calculate()">Calculate	
-		<button class="button button2" onclick="location.href='https://polarity.exchange/dapps?dapp=3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA';">Proceed For Loan	
-		
-
-		</div>
-	<script src="app.js"></script>
-	
-		
-</body>
 
 <div style="position: absolute;left:10px;width:300px;height:100px;border:3px solid #FFFF; background: #0dbaae; border-radius: 10px; text-align: left; font-size:14px;font-family:courier,arial">
 	<font color="#FFFFFF"><div class="mypanel1"></div>
@@ -131,5 +103,33 @@
 	</h1></font>
 </div>
 
+<body>
+	<div class="calculator">
+		<h2>Tradecoin Loan DApp Calculator</h2>
+
+		<!-- Calling Calculate function defined in app.js -->
+		<p>Enter Your TN Amount for Collateral:<br>
+			<input id="amount" type="number" onchange="Calculate()">
+		</p>
+
+		<p>Interest Rate Per Day for 1000 TN:
+			<input id="rate" type="text" value="0.9792 TN" readonly="Calculate()">
+		</p>
+		
+
+		<p>Loan Period (1-90 Days):
+			<input id="days" type="number" min="2" max="90" onchange="Calculate()">
+		</p>
+
+		<h2 id="total"></h2>
+		<button class="button button1" onclick="Calculate()">Calculate	
+		<button class="button button2" onclick="location.href='https://polarity.exchange/dapps?dapp=3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA';">Proceed For Loan	
+		
+
+		</div>
+	<script src="app.js"></script>
+	
+		
+</body>
 	
 </html>
