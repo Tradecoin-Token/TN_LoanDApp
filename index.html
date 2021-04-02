@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRD Loan DApp Statistics</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <style>
+        .no-focus:focus{
+            box-shadow:none !important;
+            outline:none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="text-center py-5">
+        <span class="spinner-border text-warning" role="status"></span>
+    </div>
+    <div id="mainArea" class="d-none">
+        <div class="shadow-sm py-3 text-center">
+            <img src="logo.jpg" height="40px;">
+            <h4 class="d-inline" style="vertical-align:middle;">TN Loan DApp Statistics</h4>
+        </div>
+
+        <div class="container-fluid mx-auto py-5 px-lg-5">
+            <div class="row">
+                <div class="col-md-3 col-12 mb-3">
+                    <div class="card py-3" style="background: #0dbaae;">
+                        <div class="card-body text-center h4 text-white" id="panel1"></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12 mb-3">
+                    <div class="card py-3" style="background: #0dbaae;">
+                        <div class="card-body text-center h4 text-white" id="panel2"></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12 mb-3">
+                    <div class="card py-3" style="background: #0dbaae;">
+                        <div class="card-body text-center h4 text-white" id="panel3"></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12 mb-3">
+                    <div class="card py-3" style="background: #0dbaae;">
+                        <div class="card-body text-center h4 text-white" id="panel4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="mx-auto p-md-5 p-4 rounded-lg text-white" style="background-color: #ff007f; max-width: 450px;">
+            <h4 class="text-center mb-4">Tradecoin Loan DApp Calculator</h4>
+            Enter Your TN Amount for Collateral:
+            <input type="number" id="amount" onchange="Calculate()" class="form-control no-focus p-3"><br>
+            Interest Rate Per Day for 1000 TN:
+            <input id="rate" type="text" value="0.9792 TN" class="form-control no-focus p-3" readonly><br>
+            Loan Period (1-90 Days):
+            <input id="days" type="number" min="2" max="90" class="form-control no-focus p-3" onchange="Calculate()"><br>
+            <h4 id="total"></h4>
+            <button class="btn btn-success w-100 py-3" onclick="Calculate()">Calculate</button><br><br>
+            <button class="btn btn-success w-100 py-3" onclick="location.href='https://polarity.exchange/dapps?dapp=3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA';">Proceed For Loan	</button>
+        </div>
+
+        <div class="container-fluid mx-auto py-5 px-lg-5">
+            <div class="row">
+                <div class="col-md-9 pb-3">
+                    <div class="form-group rounded position-relative border p-1">
+                        <label class="small ml-3 mt-n3 px-2 position-absolute bg-white">Enter Address</label>
+                        <input type="text" class="form-control border-0 px-4 no-focus" oninput="search(this.value);">
+                    </div>
+                </div>
+                <div class="col-md-3 pb-3">
+                    <div class="form-group rounded position-relative border p-1">
+                        <label class="small ml-3 mt-n3 px-2 position-absolute bg-white">Sort By</label>
+                        <select class="custom-select no-focus border-0 pl-3" onchange="sortData(this.value);">
+                            <option value="0" selected>Loan Amount (Hight to Low)</option>
+                            <option value="1">Loan Amount (Low to Hight)</option>
+                            <option value="2">Address (A-Z)</option>
+                            <option value="3">Address (Z-A)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="resultArea"></div>
+        </div>
+    </div>
+    <script>
+        const APIURL = "https://tnnode.turtlenetwork.eu/addresses/data/3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA";
+        var loanData = '';
+        var loading = document.getElementById("loading");
+        var mainArea = document.getElementById("mainArea");
+        var resultArea = document.getElementById("resultArea");
+        var address = '';
+        var sortRule = 0;
+        var blockHeight;
+        window.onload = async function(){
+            var responseObject = await fetch(APIURL);
+            loanData = await responseObject.json();
+
+            var panel1ResponseObject = await fetch("https://tnnode.turtlenetwork.eu/addresses/data/3Jr6cqFtjxLr47JRKAL78dvyLamCtT29Vzd?key=eligibilityfactor");
+            panel1Data = await panel1ResponseObject.json();
+            document.getElementById("panel1").innerHTML = 'Loan Against Collateral<br>'+panel1Data[0].value+'%';
+
+            var panel2ResponseObject = await fetch("https://tnnode.turtlenetwork.eu/assets/balance/3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA/7RB3BWayeCVPq3kkpkeJZAFv2DYCB5gEwnutEpRofaw4");
+            panel2Data = await panel2ResponseObject.json();
+            document.getElementById("panel2").innerHTML = 'DApp Balance  in USDT<br>'+(panel2Data.balance/1000000).toFixed(2);
+
+            var panel3ResponseObject = await fetch("https://tnnode.turtlenetwork.eu/addresses/data/3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA?key=Total_Loan_Paid%3A");
+            panel3Data = await panel3ResponseObject.json();
+            document.getElementById("panel3").innerHTML = 'Total Loan Paid<br>'+panel3Data[0].value+' TN';
+
+            var panel4ResponseObject = await fetch("https://tnnode.turtlenetwork.eu/blocks/height");
+            panel4Data = await panel4ResponseObject.json();
+            document.getElementById("panel4").innerHTML = 'Block Height<br>'+panel4Data.height;
+            blockHeight = panel4Data.height;
+
+            loading.remove();
+            mainArea.classList.remove('d-none');
+            showData(loanData, sortRule);
+        }
+
+        function search(value){
+            address = value.trim();
+            showData(loanData, sortRule);
+        }
+
+        function sortData(value){
+            sortRule = value;
+            showData(loanData, sortData);
+        }
+
+        function showData(loanData, sort){
+            var data = loanData;
+            var output = '';
+            var allIndex = [];
+            var searchResult = [];
+            data.forEach(function(item, index){
+                if(item.key.includes(address)){
+                    thisKey = item.key.substring(item.key.lastIndexOf("_")+1);
+                    thisValue = item.value;
+                    if(allIndex.indexOf(thisKey) < 0){
+                        allIndex.push(thisKey);
+                        searchResult.push({Address:thisKey});
+                    }
+                    var thisIndex = allIndex.indexOf(thisKey);
+                    if(item.key.includes('Borrow_height')){
+                        searchResult[thisIndex].BorrowHeight = item.value;
+                    }
+                    if(item.key.includes('Collateral_Amount')){
+                        searchResult[thisIndex].CollateralAmount = item.value;
+                    }
+                    if(item.key.includes('Loan_Amount')){
+                        searchResult[thisIndex].LoanAmount = item.value;
+                    }
+                    if(item.key.includes('Loan_Interest')){
+                        searchResult[thisIndex].LoanInterest = item.value;
+                    }
+                    if(item.key.includes('Loan_Status')){
+                        searchResult[thisIndex].LoanStatus = item.value;
+                    }
+                    if(item.key.includes('Total_Loan_Blocks')){
+                        searchResult[thisIndex].TotalLoanBlocks = item.value;
+                    }
+                }
+            });
+
+            if(searchResult.length > 0){
+                searchResult.forEach(function(item, index){
+                    if(searchResult[index].LoanAmount === undefined){
+                        delete searchResult[index];
+                    }
+                });
+
+                if(sortRule == 0){
+                    searchResult.sort(function (a, b) {
+                        return parseFloat(a.LoanAmount) - parseFloat(b.LoanAmount);
+                    });
+                    searchResult =  searchResult.reverse();
+                }else if(sortRule == 1){
+                    searchResult.sort(function (a, b) {
+                        return parseFloat(a.LoanAmount) - parseFloat(b.LoanAmount);
+                    });
+                }else if(sortRule == 2){
+                    searchResult.sort(function (a, b) {
+                        return a.Address - b.Address;
+                    });
+                }else if(sortRule == 3){
+                    searchResult.sort(function (a, b) {
+                        return a.Address - b.Address;
+                    });
+                    searchResult =  searchResult.reverse();
+                }
+
+                output += '<div class="table-responsive">'
+                output += '<table class="table border table-borderless table-striped table-dark" id="table">'
+                output += '<thead class="text-white" style="background-color: #ff007f">';
+                output += '<tr>';
+                output += '<th>Address</th>';
+                output += '<th>Borrow Height</th>';
+                output += '<th>Collateral Amount</th>';
+                output += '<th>Loan Amount</th>';
+                output += '<th>Loan Interest</th>';
+                output += '<th>Loan Status</th>';
+                output += '<th>Total Loan Blocks</th>';
+                output += '<th>Indicator</th>';
+                output += '</tr>';
+                output += '</thead>';
+                output += '<tbody>';
+                searchResult.forEach(function(item, index){
+                    output += '<tr style="cursor:pointer;">';
+                    output += '<td>'+searchResult[index].Address+'</td>';
+                    if(searchResult[index].BorrowHeight === undefined || String(searchResult[index].BorrowHeight).length < 1){
+                        output += '<td>N&#47;A</td>';
+                    }else{
+                        output += '<td>'+searchResult[index].BorrowHeight+'</td>';
+                    }
+                    if(searchResult[index].CollateralAmount === undefined || String(searchResult[index].CollateralAmount).length < 1){
+                        output += '<td>N&#47;A</td>';
+                    }else{
+                        output += '<td>'+(searchResult[index].CollateralAmount/100000000)+'</td>';
+                    }
+                    if(searchResult[index].LoanAmount === undefined || String(searchResult[index].LoanAmount).length < 1){
+                        output += '<td>N&#47;A</td>';
+                    }else{
+                        output += '<td>'+(searchResult[index].LoanAmount/1000000)+' USDT</td>';
+                    }
+                    if(searchResult[index].LoanInterest === undefined || String(searchResult[index].LoanInterest).length < 1){
+                        output += '<td>N&#47;A</td>';
+                    }else{
+                        output += '<td>'+(searchResult[index].LoanInterest/100000000)+'</td>';
+                    }
+                    if(searchResult[index].LoanStatus === undefined || String(searchResult[index].LoanStatus).length < 1){
+                        output += '<td>N&#47;A</td>';
+                    }else{
+                        output += '<td>'+searchResult[index].LoanStatus+'</td>';
+                    }
+                    if(searchResult[index].TotalLoanBlocks === undefined || String(searchResult[index].TotalLoanBlocks).length < 1){
+                        output += '<td>N&#47;A</td>';
+                    }else{
+                        output += '<td>'+searchResult[index].TotalLoanBlocks+'</td>';
+                    }
+                    var Indicator = parseInt((searchResult[index].BorrowHeight + searchResult[index].TotalLoanBlocks) - blockHeight);
+                    output += '<td>';
+                        if(Indicator > 0){
+                            output += '<span class="bg-success px-2 py-1 w-100 small rounded text-white">Loan Running</span>';
+                        }else{
+                            output += '<span class="bg-danger px-2 py-1 w-100 small rounded text-white">Loan Expired</span>';
+                        }
+                    output += '</td>';
+                    output += '</tr>';
+                });
+                output += '</tbody>';
+                output += '</table>';
+                output += '</div>';
+
+                output += '<div class="text-center pt-3"><button class="btn btn-success px-5 py-3" onclick="downloadTable();">Download As Excel</button></div>';
+            }else{
+                output = '<h4 class="text-center mt-4">Opps!! No Result was found.</h4>';
+            }
+            resultArea.innerHTML = output;
+        }
+
+        function downloadTable(filename = ''){
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById("table");
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+            filename = filename?filename+'.xls':'download.xls';
+            downloadLink = document.createElement("a");
+            document.body.appendChild(downloadLink);
+            if(navigator.msSaveOrOpenBlob){
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob( blob, filename);
+            }else{
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        }
+
+        function Calculate() {
+        	const amount = document.querySelector("#amount").value;
+        	const rate = document.querySelector("#rate").value;
+        	const days = document.querySelector("#days").value;
+        	const oneday = 1440
+        	const totalloanblocks = 1440*days
+        	const perblockinterest = 0.00000068
+        	const interest = (perblockinterest*totalloanblocks)*amount;
+        	const totalinterest = interest.toFixed(6);
+        	document.querySelector("#total").innerHTML = "Total Interest(TN): " + totalinterest;		
+        }
+
+
+    </script>
+</body>
+</html>
