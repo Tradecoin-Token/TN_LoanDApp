@@ -219,7 +219,7 @@
                     if(searchResult[index].CollateralAmount === undefined || String(searchResult[index].CollateralAmount).length < 1){
                         output += '<td>N&#47;A</td>';
                     }else{
-                        output += '<td>'+(searchResult[index].CollateralAmount/100000000)+'</td>';
+                        output += '<td>'+(searchResult[index].CollateralAmount/100000000)+' TN</td>';
                     }
                     if(searchResult[index].LoanAmount === undefined || String(searchResult[index].LoanAmount).length < 1){
                         output += '<td>N&#47;A</td>';
@@ -229,7 +229,7 @@
                     if(searchResult[index].LoanInterest === undefined || String(searchResult[index].LoanInterest).length < 1){
                         output += '<td>N&#47;A</td>';
                     }else{
-                        output += '<td>'+(searchResult[index].LoanInterest/100000000)+'</td>';
+                        output += '<td>'+(searchResult[index].LoanInterest/100000000)+' TN</td>';
                     }
                     if(searchResult[index].LoanStatus === undefined || String(searchResult[index].LoanStatus).length < 1){
                         output += '<td>N&#47;A</td>';
