@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRD Loan DApp Statistics</title>
+    <title>TN Loan DApp Statistics</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <style>
         .no-focus:focus{
@@ -21,7 +21,7 @@
     <div id="mainArea" class="d-none">
         <div class="shadow-sm py-3 text-center">
             <img src="logo.jpg" height="40px;">
-            <h4 class="d-inline" style="vertical-align:middle;">TRD Loan DApp Statistics</h4>
+            <h4 class="d-inline" style="vertical-align:middle;">TN Loan DApp Statistics</h4>
         </div>
 
         <div class="container-fluid mx-auto py-5 px-lg-5">
@@ -219,7 +219,7 @@
                     if(searchResult[index].CollateralAmount === undefined || String(searchResult[index].CollateralAmount).length < 1){
                         output += '<td>N&#47;A</td>';
                     }else{
-                        output += '<td>'+(searchResult[index].CollateralAmount/100000000)+' TN</td>';
+                        output += '<td>'+(searchResult[index].CollateralAmount/100000000)+'</td>';
                     }
                     if(searchResult[index].LoanAmount === undefined || String(searchResult[index].LoanAmount).length < 1){
                         output += '<td>N&#47;A</td>';
@@ -229,7 +229,7 @@
                     if(searchResult[index].LoanInterest === undefined || String(searchResult[index].LoanInterest).length < 1){
                         output += '<td>N&#47;A</td>';
                     }else{
-                        output += '<td>'+(searchResult[index].LoanInterest/100000000)+' TN</td>';
+                        output += '<td>'+(searchResult[index].LoanInterest/100000000)+'</td>';
                     }
                     if(searchResult[index].LoanStatus === undefined || String(searchResult[index].LoanStatus).length < 1){
                         output += '<td>N&#47;A</td>';
@@ -255,31 +255,11 @@
                 output += '</table>';
                 output += '</div>';
 
-                output += '<div class="text-center pt-3"><button class="btn btn-success px-5 py-3" onclick="downloadTable();">Download As Excel</button></div>';
+                output += '<div class="text-center pt-3"><button class="btn btn-success px-5 py-3" onclick="exportTableToCSV(\'download.csv\');">Download As Excel</button></div>';
             }else{
                 output = '<h4 class="text-center mt-4">Opps!! No Result was found.</h4>';
             }
             resultArea.innerHTML = output;
-        }
-
-        function downloadTable(filename = ''){
-            var downloadLink;
-            var dataType = 'application/vnd.ms-excel';
-            var tableSelect = document.getElementById("table");
-            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-            filename = filename?filename+'.xls':'download.xls';
-            downloadLink = document.createElement("a");
-            document.body.appendChild(downloadLink);
-            if(navigator.msSaveOrOpenBlob){
-                var blob = new Blob(['\ufeff', tableHTML], {
-                    type: dataType
-                });
-                navigator.msSaveOrOpenBlob( blob, filename);
-            }else{
-                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-                downloadLink.download = filename;
-                downloadLink.click();
-            }
         }
 
         function Calculate() {
@@ -293,6 +273,29 @@
         	const totalinterest = interest.toFixed(6);
         	document.querySelector("#total").innerHTML = "Total Interest(TN): " + totalinterest;		
         }
+		function exportTableToCSV(filename) {
+			var csv = [];
+			var rows = document.querySelectorAll("table tr");
+			for (var i = 0; i < rows.length; i++) {
+				var row = [], cols = rows[i].querySelectorAll("td, th");
+				for (var j = 0; j < cols.length; j++) 
+					row.push(cols[j].innerText);   
+				csv.push(row.join(","));        
+			}
+			downloadCSV(csv.join("\n"), filename);
+		}
+		
+		function downloadCSV(csv, filename) {
+			var csvFile;
+			var downloadLink;
+			csvFile = new Blob([csv], {type: "text/csv"});
+			downloadLink = document.createElement("a");
+			downloadLink.download = filename;
+			downloadLink.href = window.URL.createObjectURL(csvFile);
+			downloadLink.style.display = "none";
+			document.body.appendChild(downloadLink);
+			downloadLink.click();
+		}
 
 
     </script>
