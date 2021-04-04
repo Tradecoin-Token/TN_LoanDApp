@@ -205,6 +205,7 @@
                 output += '<th>Loan Status</th>';
                 output += '<th>Total Loan Blocks</th>';
                 output += '<th>Indicator</th>';
+				output += '<th>Balance Hours</th>';
                 output += '</tr>';
                 output += '</thead>';
                 output += '<tbody>';
@@ -244,7 +245,7 @@
                     var Indicator = parseInt((searchResult[index].BorrowHeight + searchResult[index].TotalLoanBlocks) - blockHeight);
                     output += '<td>';
                         if(Indicator > 0){
-                            output += '<span class="bg-success px-2 py-1 w-100 small rounded text-white">Loan Running</span>';
+                            output += '<span class="bg-success px-2 py-1 w-100 small rounded text-white">Loan Running</span>'+" "+'<td>'+(Indicator/60).toFixed(2)+" Hrs";
                         }else{
                             output += '<span class="bg-danger px-2 py-1 w-100 small rounded text-white">Loan Expired</span>';
                         }
