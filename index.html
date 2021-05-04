@@ -101,7 +101,7 @@
 
             var panel1ResponseObject = await fetch("https://tnnode.turtlenetwork.eu/addresses/data/3Jr6cqFtjxLr47JRKAL78dvyLamCtT29Vzd?key=eligibilityfactor");
             panel1Data = await panel1ResponseObject.json();
-            document.getElementById("panel1").innerHTML = 'Loan Against Collateral<br>'+panel1Data[0].value+'%';
+            document.getElementById("panel1").innerHTML = 'Loan Against Collateral<br>'+(panel1Data[0].value/100).toFixed(2)+'$';
 
             var panel2ResponseObject = await fetch("https://tnnode.turtlenetwork.eu/assets/balance/3JhY5JU9TsWJnuXXznZsSf2dGSNujkBQATA/7RB3BWayeCVPq3kkpkeJZAFv2DYCB5gEwnutEpRofaw4");
             panel2Data = await panel2ResponseObject.json();
